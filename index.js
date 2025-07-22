@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+
 // 中间件配置
 app.use(express.json());
 
@@ -27,5 +28,5 @@ app.use((req, res) => {
 
 // 启动服务器
 app.listen(PORT, () => {
-    console.log(`Express server running at http://localhost:${PORT}/`);
+    console.log(`Express server running at http://localhost:${PORT} ${new Date().toISOString()}`);
 });
