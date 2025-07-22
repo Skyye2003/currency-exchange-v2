@@ -1,0 +1,250 @@
+openapi: 3.0.0
+info:
+  title: Currency Exchange API
+  version: 1.0.0
+  description: API for currency exchange platform
+
+paths:
+  /users:
+    post:
+      tags: 
+        - users
+      summary: 创建新用户
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: 用户创建成功
+    get:
+      tags: 
+        - users
+      summary: 获取用户列表
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: 用户列表
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+
+  /users/{userId}:
+    get:
+      tags: 
+        - users
+      summary: 获取单个用户
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 用户详情
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+    put:
+      tags: 
+        - users
+      summary: 更新用户信息
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: 更新成功
+    delete:
+      tags: 
+        - users
+      summary: 删除用户
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: 删除成功
+
+  /watchlists:
+    post:
+      tags: 
+        - watchlist
+      summary: 创建新看表
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Watchlist'
+      responses:
+        '201':
+          description: 看表创建成功
+    get:
+      tags: 
+        - watchlist
+      summary: 获取用户所有看表
+      responses:
+        '200':
+          description: 看表列表
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Watchlist'
+
+  /watchlists/{watchlistId}:
+    get:
+      tags: 
+        - watchlist
+      summary: 获取单个看表
+      parameters:
+        - name: watchlistId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 看表详情
+    put:
+      tags: 
+        - watchlist
+      summary: 更新看表
+      parameters:
+        - name: watchlistId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Watchlist'
+      responses:
+        '200':
+          description: 更新成功
+    delete:
+      tags: 
+        - watchlist
+      summary: 删除看表
+      parameters:
+        - name: watchlistId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: 删除成功
+
+  /currencies:
+    get:
+      tags: 
+        - currency
+      summary: 获取所有货币
+      responses:
+        '200':
+          description: 货币列表
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Currency'
+
+  /currencies/{currencyId}:
+    get:
+      tags: 
+        - currency
+      summary: 获取货币详情
+      parameters:
+        - name: currencyId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 货币详情
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Currency'
+
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+        email:
+          type: string
+          format: email
+        createdAt:
+          type: string
+          format: date-time
+    Watchlist:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        userId:
+          type: string
+          format: uuid
+        currencyFrom:
+          type: string
+          example: USD
+        currencyTo:
+          type: string
+          example: CNY
+        createdAt:
+          type: string
+          format: date-time
+    Currency:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        code:
+          type: string
+          example: USD
+        name:
+          type: string
+          example: US Dollar
+        symbol:
+          type: string
+          example: "$"
