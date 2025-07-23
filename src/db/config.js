@@ -1,6 +1,5 @@
 import mysql from 'mysql2/promise';
 
-
 // 数据库配置（使用环境变量 + 默认值）
 const dbConfig = {
   host: 'localhost',
@@ -44,6 +43,8 @@ export const query = async (sql, values) => {
     if (connection) connection.release();
   }
 };
+
+
 
 // 事务处理封装
 export const transaction = async (callback) => {
