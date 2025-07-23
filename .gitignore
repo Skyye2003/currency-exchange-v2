@@ -1,6 +1,9 @@
 # 依赖目录
 node_modules/
 
+# cursor
+.cursor/
+
 # 环境变量文件
 .env
 .env.local
