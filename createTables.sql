@@ -31,3 +31,41 @@ INSERT INTO currencies (code, name, symbol, exchange_rate) VALUES
 ('JPY', 'Japanese Yen', '¥', 144.500000),
 ('CNY', 'Chinese Yuan', '¥', 7.200000);
 
+-- 插入模拟用户数据（密码统一为'password123'的哈希值）
+INSERT INTO users (id, name, email, password_hash, balance) VALUES
+(
+    UUID(),
+    '张三',
+    'zhangsan@example.com',
+    '$2b$10$N9qo8uLOickgx2ZMRZoMye3Z7g7C/7pIzEiG7sJ4Z6d1tq1Q1QJ/W', -- password123
+    10000.00
+),
+(
+    UUID(),
+    '李四',
+    'lisi@example.com',
+    '$2b$10$N9qo8uLOickgx2ZMRZoMye3Z7g7C/7pIzEiG7sJ4Z6d1tq1Q1QJ/W',
+    5000.00
+),
+(
+    UUID(),
+    '王五',
+    'wangwu@example.com',
+    '$2b$10$N9qo8uLOickgx2ZMRZoMye3Z7g7C/7pIzEiG7sJ4Z6d1tq1Q1QJ/W',
+    15000.00
+),
+(
+    UUID(),
+    'Emma Johnson',
+    'emma.j@example.com',
+    '$2b$10$N9qo8uLOickgx2ZMRZoMye3Z7g7C/7pIzEiG7sJ4Z6d1tq1Q1QJ/W',
+    8000.00
+),
+(
+    UUID(),
+    'Mohamed Ali',
+    'm.ali@example.com',
+    '$2b$10$N9qo8uLOickgx2ZMRZoMye3Z7g7C/7pIzEiG7sJ4Z6d1tq1Q1QJ/W',
+    12000.00
+);
+
