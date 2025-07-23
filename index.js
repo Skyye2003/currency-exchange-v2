@@ -21,6 +21,12 @@ app.get('/rates', (req, res) => {
     });
 });
 
+const userRouter = require('./src/routes/user');
+const currencyRouter = require('./src/routes/currency');
+
+app.use('/users', userRouter);
+app.use('/currencies', currencyRouter);
+
 // 处理404
 app.use((req, res) => {
     res.status(404).send('Not Found');
