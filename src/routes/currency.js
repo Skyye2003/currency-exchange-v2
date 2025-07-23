@@ -1,17 +1,17 @@
 const express = require('express');
 const router = express.Router();
+const db = require('../db');
 
-// Mock users data
-const users = [
-    { id: '1', name: 'Alice', email: 'alice@example.com', createdAt: new Date().toISOString() },
-    { id: '2', name: 'Bob', email: 'bob@example.com', createdAt: new Date().toISOString() },
-    // Add more users as needed
-];
-
-// GET /users?limit=10
-router.get('/', (req, res) => {
-    const limit = parseInt(req.query.limit, 10) || 10;
-    res.json(users.slice(0, limit));
+// GET /currencies
+router.get('/', async (req, res) => {
+  try {
+    const [rows] = await db.query(
+      'SELECT id, code, name, symbol FROM currencies'
+    );
+    res.json(rows);
+  } catch (err) {
+    res.status(500).json({ error: 'Database error', details: err.message });
+  }
 });
 
 module.exports = router;

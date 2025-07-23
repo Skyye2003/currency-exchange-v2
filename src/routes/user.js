@@ -1,17 +1,19 @@
 const express = require('express');
 const router = express.Router();
-
-// Mock users data
-const users = [
-    { id: '1', name: 'Alice', email: 'alice@example.com', createdAt: new Date().toISOString() },
-    { id: '2', name: 'Bob', email: 'bob@example.com', createdAt: new Date().toISOString() },
-    // 可根据需要添加更多用户
-];
+const db = require('../db');
 
 // GET /users?limit=10
-router.get('/', (req, res) => {
-    const limit = parseInt(req.query.limit, 10) || 10;
-    res.json(users.slice(0, limit));
+router.get('/', async (req, res) => {
+  const limit = parseInt(req.query.limit, 10) || 10;
+  try {
+    const [rows] = await db.query(
+      'SELECT id, name, email, created_at AS createdAt FROM users LIMIT ?',
+      [limit]
+    );
+    res.json(rows);
+  } catch (err) {
+    res.status(500).json({ error: 'Database error', details: err.message });
+  }
 });
 
 module.exports = router;
