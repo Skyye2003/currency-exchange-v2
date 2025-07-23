@@ -2,7 +2,7 @@
 
 const express = require('express');
 const router = express.Router();
-const db = require('../db/index'); // 假设你的数据库连接在这里
+const db = require('../config/db'); // 假设你的数据库连接在这里
 
 // PUT: 更新用户信息（不包括密码）
 router.put('/:id', async (req, res) => {

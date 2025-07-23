@@ -2,7 +2,7 @@
 
 const express = require('express');
 const router = express.Router();
-const db = require('../db/index');
+const db = require('../config/db');
 
 // PUT: 更新货币信息（通过 code）
 router.put('/:code', async (req, res) => {
