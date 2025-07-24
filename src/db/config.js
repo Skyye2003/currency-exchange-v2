@@ -44,8 +44,6 @@ export const query = async (sql, values) => {
   }
 };
 
-
-
 // 事务处理封装
 export const transaction = async (callback) => {
   const connection = await pool.getConnection();
