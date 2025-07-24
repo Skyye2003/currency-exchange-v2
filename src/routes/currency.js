@@ -7,6 +7,18 @@ const router = express.Router();
 // * base路由
 const path = '/currency';
 
+// GET /currencies
+router.get(`${path}`, async (req, res) => {
+  try {
+    const [rows] = await query(
+      'SELECT id, code, name, symbol FROM currencies'
+    );
+    res.json(rows);
+  } catch (err) {
+    res.status(500).json({ error: 'Database error', details: err.message });
+  }
+});
+
 // * 删除货币记录
 router.delete(`${path}/:id`, async (req, res) => {
   try {

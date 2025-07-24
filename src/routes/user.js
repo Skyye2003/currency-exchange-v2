@@ -7,6 +7,19 @@ const router = express.Router();
 // * base路由
 const path = '/user';
 
+router.get(`${path}`, async (req, res) => {
+    const limit = parseInt(req.query.limit, 10) || 10;
+    try {
+      const [rows] = await query(
+        'SELECT id, name, email, created_at AS createdAt FROM users LIMIT ?',
+        [limit]
+      );
+      res.json(rows);
+    } catch (err) {
+      res.status(500).json({ error: 'Database error', details: err.message });
+    }
+  });
+
 router.delete(`${path}/:id`, async (req, res) => {
     try {
         const userId = req.params.id;
