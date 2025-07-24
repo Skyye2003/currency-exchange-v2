@@ -56,5 +56,37 @@ router.delete(`${path}/:id`, async (req, res) => {
   }
 });
 
+router.post(`${path}`, async (req, res) => {
+    const {
+        code, 
+        name,
+        symbol,
+        exchange_rate
+    } = req.body
+
+    if (!code || !name || !symbol || !exchange_rate) {
+        return res.status(400).json({
+            error: 'Missing required fields'
+        })
+    }
+
+    const sql = `
+        INSERT INTO currencies (code, name, symbol, exchange_rate, last_updated)
+        VALUES (?, ?, ?, ?, NOW())
+    `
+
+    try {
+        await query(sql, [code, name, symbol, exchange_rate])
+        res.status(201).json({
+            message: 'Currency created successfully',
+        })
+    } catch (e) {        
+        console.error(e)
+        return res.status(500).json({
+            error: 'Database error'
+        })
+    }
+})
+
 // 导出路由
 export default router;
