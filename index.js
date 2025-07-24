@@ -31,7 +31,7 @@ const initializeServer = async () => {
 
 // 路由配置
 import currencyRouter from './src/routes/currency.js';
-app.use('/api/currencies', currencyRouter);
+app.use('/api', currencyRouter);
 
 // 404处理
 app.use((req, res) => {
