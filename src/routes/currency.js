@@ -4,8 +4,10 @@ const express = require('express');
 const router = express.Router();
 const { query } = require('../config/db');
 
+const path='/currency';
+
 // PUT: 更新货币信息（通过 id）
-router.put('/:id', async (req, res) => {
+router.put(`${path}/:id`, async (req, res) => {
   const { id } = req.params;
   const { name, symbol, exchange_rate } = req.body;
 

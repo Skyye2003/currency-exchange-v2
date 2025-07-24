@@ -2,8 +2,9 @@ const express = require('express');
 const router = express.Router();
 const { query } = require('../config/db'); // 使用通用的 query 方法
 
+const path='/user'
 // PUT: 更新用户信息（不包括密码）
-router.put('/:id', async (req, res) => {
+router.put(`${path}/:id`, async (req, res) => {
   const { id } = req.params;
   const { name, email, balance } = req.body;
 
