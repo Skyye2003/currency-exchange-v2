@@ -47,3 +47,37 @@ router.delete(`${path}/:id`, async (req, res) => {
         res.status(500).json({ error: 'Failed to delete user' });
     }
 });
+
+router.post(`${path}`, async (req, res) => {
+    const {
+        name,
+        email,
+        password_hash,
+        balance
+    } = req.body
+
+    if (!name || !email || !password_hash || balance === undefined) {
+        return res.status(400).json({
+            error: 'Missing required fields'
+        })
+    }
+
+    const sql = `
+        INSERT INTO users (name, email, password_hash, balance, created_at, updated_at)
+        VALUES (?, ?, ?, ?, NOW(), NOW())
+    `
+
+    try {
+        await query(sql, [name, email, password_hash, balance])
+        res.status(201).json({
+            message: 'User created successfully',
+        })
+    } catch (e) {        
+        console.error(e)
+        return res.status(500).json({
+            error: 'Database error'
+        })
+    }
+})
+
+export default router
