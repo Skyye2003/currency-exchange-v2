@@ -1,7 +1,8 @@
+// index.js
+
 const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 3000;
-
 
 // 中间件配置
 app.use(express.json());
@@ -12,7 +13,6 @@ app.get('/', (req, res) => {
 });
 
 app.get('/rates', (req, res) => {
-    // 后续可替换为真实数据
     res.json({
         USD: 1.0,
         EUR: 0.92,
@@ -20,6 +20,14 @@ app.get('/rates', (req, res) => {
         lastUpdated: new Date().toISOString()
     });
 });
+
+// ✅ 注册 user 和 currency 路由
+const userRouter = require('./src/routes/user');       // 用户路由
+const currencyRouter = require('./src/routes/currency'); // 货币路由
+
+// 挂载到 /api 下
+app.use('/api/users', userRouter);       // 对应 router.put('api/users/:id', ...) ✅
+app.use('/api/currency', currencyRouter); // 对应 router.put('api/currency/:code', ...) ✅
 
 // 处理404
 app.use((req, res) => {

@@ -1,11 +1,10 @@
 import mysql from 'mysql2/promise';
 
-
 // 数据库配置（使用环境变量 + 默认值）
 const dbConfig = {
   host: 'localhost',
   user: 'root',
-  password: 'n3u3da!',
+  password: '123456',
   database: 'currency_exchange',
   waitForConnections: true,
   connectionLimit: 10,

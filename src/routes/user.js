@@ -1,8 +1,6 @@
-// routes/user.js
-
 const express = require('express');
 const router = express.Router();
-const db = require('../config/db'); // 假设你的数据库连接在这里
+const { query } = require('../config/db'); // 使用通用的 query 方法
 
 // PUT: 更新用户信息（不包括密码）
 router.put('/:id', async (req, res) => {
@@ -15,12 +13,9 @@ router.put('/:id', async (req, res) => {
   }
 
   try {
-    const connection = await db.getConnection();
-
     // 检查用户是否存在
-    const [existingUsers] = await connection.execute('SELECT id FROM users WHERE id = ?', [id]);
+    const existingUsers = await query('SELECT id FROM users WHERE id = ?', [id]);
     if (existingUsers.length === 0) {
-      connection.release();
       return res.status(404).json({ error: '用户不存在' });
     }
 
@@ -34,9 +29,8 @@ router.put('/:id', async (req, res) => {
     }
     if (email !== undefined) {
       // 检查 email 是否已被其他用户使用
-      const [emailCheck] = await connection.execute('SELECT id FROM users WHERE email = ? AND id != ?', [email, id]);
+      const emailCheck = await query('SELECT id FROM users WHERE email = ? AND id != ?', [email, id]);
       if (emailCheck.length > 0) {
-        connection.release();
         return res.status(409).json({ error: '该邮箱已被其他用户使用' });
       }
       fields.push('email = ?');
@@ -47,12 +41,10 @@ router.put('/:id', async (req, res) => {
       values.push(parseFloat(balance).toFixed(2));
     }
 
-    values.push(id); // 最后一个 ? 是 WHERE id = ?
+    values.push(id); // WHERE id = ?
 
-    const query = `UPDATE users SET ${fields.join(', ')} WHERE id = ?`;
-    await connection.execute(query, values);
-
-    connection.release();
+    const sql = `UPDATE users SET ${fields.join(', ')} WHERE id = ?`;
+    await query(sql, values);
 
     res.json({ message: '用户信息更新成功', userId: id });
   } catch (err) {
