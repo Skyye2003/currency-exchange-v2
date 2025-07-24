@@ -10,7 +10,7 @@ const path = '/currency';
 // GET /currencies
 router.get(`${path}`, async (req, res) => {
   try {
-    const [rows] = await db.query(
+    const [rows] = await query(
       'SELECT id, code, name, symbol FROM currencies'
     );
     res.json(rows);
