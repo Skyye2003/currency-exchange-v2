@@ -7,6 +7,19 @@ const router = express.Router();
 // * base路由
 const path = '/user';
 
+router.get(`${path}`, async (req, res) => {
+    const limit = parseInt(req.query.limit, 10) || 10;
+    try {
+      const [rows] = await query(
+        'SELECT id, name, email, created_at AS createdAt FROM users LIMIT ?',
+        [limit]
+      );
+      res.json(rows);
+    } catch (err) {
+      res.status(500).json({ error: 'Database error', details: err.message });
+    }
+  });
+
 router.delete(`${path}/:id`, async (req, res) => {
     try {
         const userId = req.params.id;
@@ -47,3 +60,37 @@ router.delete(`${path}/:id`, async (req, res) => {
         res.status(500).json({ error: 'Failed to delete user' });
     }
 });
+
+router.post(`${path}`, async (req, res) => {
+    const {
+        name,
+        email,
+        password_hash,
+        balance
+    } = req.body
+
+    if (!name || !email || !password_hash || balance === undefined) {
+        return res.status(400).json({
+            error: 'Missing required fields'
+        })
+    }
+
+    const sql = `
+        INSERT INTO users (name, email, password_hash, balance, created_at, updated_at)
+        VALUES (?, ?, ?, ?, NOW(), NOW())
+    `
+
+    try {
+        await query(sql, [name, email, password_hash, balance])
+        res.status(201).json({
+            message: 'User created successfully',
+        })
+    } catch (e) {        
+        console.error(e)
+        return res.status(500).json({
+            error: 'Database error'
+        })
+    }
+})
+
+export default router
