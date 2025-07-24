@@ -4,7 +4,7 @@ import mysql from 'mysql2/promise';
 const dbConfig = {
   host: 'localhost',
   user: 'root',
-  password: '123',
+  password: 'n3u3da!', // 请替换为实际密码
   database: 'currency_exchange',
   waitForConnections: true,
   connectionLimit: 10,
