@@ -68,6 +68,7 @@ router.delete(`${path}/:id`, async (req, res) => {
   }
 });
 
+
 router.post(`${path}`, async (req, res) => {
     const {
         code, 
@@ -99,6 +100,43 @@ router.post(`${path}`, async (req, res) => {
         })
     }
 })
+
+
+
+
+
+// * 搜索货币记录
+router.get(`${path}/search`, async (req, res) => {
+  try {
+    const keyword = req.query.keyword;
+
+    if (!keyword) {
+      return res.status(400).json({ error: 'Keyword is required for search' });
+    }
+
+    console.log('Received keyword:', keyword);
+    console.log('Executing query:', `SELECT * FROM currencies WHERE code LIKE ? OR name LIKE ?`, [`%${keyword}%`, `%${keyword}%`]);
+    // 查询匹配的货币记录 (case-insensitive search)
+    const results = await query(
+      `SELECT * FROM currencies WHERE LOWER(code) LIKE LOWER(?) OR LOWER(name) LIKE LOWER(?)`,
+      [`%${keyword}%`, `%${keyword}%`]
+    );
+
+    console.log('Query results:', results);
+
+    res.status(200).json({
+      message: 'Search results',
+      data: results,
+    });
+  } catch (error) {
+    console.error('Search currencies error:', error);
+    res.status(500).json({
+      error: 'Failed to search currencies',
+      details: error.message,
+    });
+  }
+});
+
 
 // 导出路由
 export default router;
