@@ -1,10 +1,11 @@
-// src/routes/currency.js
+import express from 'express';
+import { query, transaction } from '../db/config.js';
 
-const express = require('express');
+// * 创建路由实例
 const router = express.Router();
-const { query } = require('../config/db');
 
-const path='/currency';
+// * base路由
+const path = '/currency';
 
 // PUT: 更新货币信息（通过 id）
 router.put(`${path}/:id`, async (req, res) => {
@@ -55,5 +56,3 @@ router.put(`${path}/:id`, async (req, res) => {
     res.status(500).json({ error: '服务器内部错误' });
   }
 });
-
-module.exports = router;

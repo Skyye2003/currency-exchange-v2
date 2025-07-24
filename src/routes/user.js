@@ -1,8 +1,11 @@
-const express = require('express');
-const router = express.Router();
-const { query } = require('../config/db'); // 使用通用的 query 方法
+import express from 'express';
+import { query, transaction } from '../db/config.js';
 
-const path='/user'
+// * 创建路由实例
+const router = express.Router();
+
+// * base路由
+const path = '/user';
 // PUT: 更新用户信息（不包括密码）
 router.put(`${path}/:id`, async (req, res) => {
   const { id } = req.params;
@@ -53,5 +56,3 @@ router.put(`${path}/:id`, async (req, res) => {
     res.status(500).json({ error: '服务器内部错误' });
   }
 });
-
-module.exports = router;
