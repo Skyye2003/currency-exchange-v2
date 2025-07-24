@@ -1,15 +1,19 @@
 import express from 'express';
 import { query, transaction } from '../db/config.js';
 
+// * 创建路由实例
 const router = express.Router();
 
-// 删除货币记录
-router.delete('/:id', async (req, res) => {
+// * base路由
+const path = '/currency';
+
+// * 删除货币记录
+router.delete(`${path}/:id`, async (req, res) => {
   try {
     const currencyId = req.params.id;
 
     // 验证ID格式（UUIDv4格式）
-    if (!/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-4[0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$/.test(currencyId)) {
+    if (!/^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/.test(currencyId)) {
       return res.status(400).json({ error: 'Invalid currency ID format' });
     }
 
@@ -29,14 +33,6 @@ router.delete('/:id', async (req, res) => {
       const deleteResult = await connection.query(
         'DELETE FROM currencies WHERE id = ?',
         [currencyId]
-      );
-
-      // 记录审计日志（示例）
-      await connection.query(
-        `INSERT INTO currency_deletion_logs 
-        (currency_id, code, name, deleted_at) 
-        VALUES (?, ?, ?, NOW())`,
-        [currencyId, existing[0].code, existing[0].name]
       );
 
       return deleteResult;
