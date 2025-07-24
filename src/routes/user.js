@@ -7,7 +7,7 @@ const router = express.Router();
 // * base路由
 const path = '/user';
 
-router.get('/', async (req, res) => {
+router.get(`${path}`, async (req, res) => {
     const limit = parseInt(req.query.limit, 10) || 10;
     try {
       const [rows] = await db.query(

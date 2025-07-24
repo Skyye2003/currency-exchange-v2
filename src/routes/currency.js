@@ -8,7 +8,7 @@ const router = express.Router();
 const path = '/currency';
 
 // GET /currencies
-router.get('/', async (req, res) => {
+router.get(`${path}`, async (req, res) => {
   try {
     const [rows] = await db.query(
       'SELECT id, code, name, symbol FROM currencies'
