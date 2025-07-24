@@ -4,7 +4,7 @@ import mysql from 'mysql2/promise';
 const dbConfig = {
   host: 'localhost',
   user: 'root',
-  password: '123',
+  password: 'n3u3da!',
   database: 'currency_exchange',
   waitForConnections: true,
   connectionLimit: 10,
@@ -43,8 +43,6 @@ export const query = async (sql, values) => {
     if (connection) connection.release();
   }
 };
-
-
 
 // 事务处理封装
 export const transaction = async (callback) => {
