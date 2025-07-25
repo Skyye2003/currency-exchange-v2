@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All Users</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2em; }
+    table { border-collapse: collapse; width: 100%; }
+    th, td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+    th { background: #f4f4f4; }
+  </style>
+</head>
+<body>
+  <h1>All Users</h1>
+  <button onclick="fetchUsers()">Refresh</button>
+  <div id="error" style="color: red;"></div>
+  <table id="usersTable">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Created At</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+  <script>
+    async function fetchUsers() {
+      document.getElementById('error').textContent = '';
+      const tbody = document.querySelector('#usersTable tbody');
+      tbody.innerHTML = '<tr><td colspan="4">Loading...</td></tr>';
+      try {
+        const res = await fetch('/user');
+        if (!res.ok) throw new Error('Network error');
+        const users = await res.json();
+        if (!Array.isArray(users) || users.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="4">No users found.</td></tr>';
+          return;
+        }
+        tbody.innerHTML = users.map(u => `
+          <tr>
+            <td>${u.id}</td>
+            <td>${u.name}</td>
+            <td>${u.email}</td>
+            <td>${u.createdAt || u.created_at}</td>
+          </tr>
+        `).join('');
+      } catch (e) {
+        tbody.innerHTML = '';
+        document.getElementById('error').textContent = e.message;
+      }
+    }
+    // Auto-fetch on page load
+    fetchUsers();
+  </script>
+</body>
+</html> 
