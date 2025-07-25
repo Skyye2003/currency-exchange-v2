@@ -4,6 +4,8 @@ import { checkDatabaseHealth } from './src/db/config.js';
 const app = express();
 const PORT = 3000;
 
+const cors = require('cors');
+app.use(cors());
 // 前置中间件
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
