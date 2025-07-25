@@ -70,6 +70,41 @@ router.get(`${path}`, async (req, res) => {
     }
   });
 
+router.get(`${path}/search`, async (req, res) => {
+    const { name, email } = req.query;
+
+    if (!name && !email) {
+        return res.status(400).json({ error: 'Provide at least one query parameter: name or email' });
+    }
+
+    try {
+        const conditions = [];
+        const values = [];
+
+        if (name) {
+            conditions.push('name LIKE ?');
+            values.push(`%${name}%`);
+        }
+        if (email) {
+            conditions.push('email LIKE ?');
+            values.push(`%${email}%`);
+        }
+
+        const sql = `SELECT * 
+                     FROM users WHERE ${conditions.join(' OR ')}`;
+        const [rows = []] = await query(sql, values); // Default to an empty array if undefined
+
+        if (!rows || rows.length === 0) {
+            return res.status(404).json({ error: 'No users found' });
+        }
+
+        res.json(rows);
+    } catch (err) {
+        console.error('Error querying users:', err);
+        res.status(500).json({ error: 'Database error', details: err.message });
+    }
+});
+
 router.delete(`${path}/:id`, async (req, res) => {
     try {
         const userId = req.params.id;
