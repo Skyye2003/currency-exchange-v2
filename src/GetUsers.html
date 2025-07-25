@@ -32,7 +32,7 @@
       const tbody = document.querySelector('#usersTable tbody');
       tbody.innerHTML = '<tr><td colspan="4">Loading...</td></tr>';
       try {
-        const res = await fetch('/api/user');
+        const res = await fetch('http://localhost:3000/api/user');
         if (!res.ok) throw new Error('Network error');
         const users = await res.json();
         if (!Array.isArray(users) || users.length === 0) {
